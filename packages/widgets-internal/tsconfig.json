@@ -1,0 +1,11 @@
+{
+  "extends": "@dex/tsconfig/react-library",
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "target": "ES2020",
+    "paths": {
+      "@dex/uikit": ["../../packages/uikit/src/index.ts"],
+      "@dex/uikit/*": ["../../packages/uikit/src/*"]
+    }
+  }
+}

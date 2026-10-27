@@ -1,0 +1,16 @@
+/*
+  X-Content-Type-Options: nosniff
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/assets/*
+  Cache-Control: public, immutable, max-age=31536000
+
+/images/*
+  Cache-Control: public, immutable, max-age=31536000
+
+/favicon.ico
+  Cache-Control: public, immutable, max-age=31536000
+
+/logo.png
+  Cache-Control: public, immutable, max-age=31536000

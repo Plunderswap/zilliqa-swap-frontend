@@ -1,0 +1,22 @@
+{
+  "name": "@dex/ui-wallets",
+  "version": "0.0.2",
+  "main": "src/index.ts",
+  "sideEffects": [
+    "*.css.ts"
+  ],
+  "private": true,
+  "dependencies": {
+    "@dex/hooks": "workspace:*",
+    "@dex/localization": "workspace:*",
+    "@dex/uikit": "workspace:*",
+    "qrcode.react": "^4.2.0"
+  },
+  "peerDependencies": {
+    "react": "^19.2.7",
+    "@types/react": "^19.2.17",
+    "swiper": "*",
+    "react-device-detect": "^2.1.2",
+    "jotai": "^2.2.2"
+  }
+}

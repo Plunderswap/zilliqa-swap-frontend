@@ -1,0 +1,9 @@
+{
+  "extends": "@dex/tsconfig/react-library",
+  "compilerOptions": {
+    "paths": {
+      "@dex/uikit": ["../../packages/uikit/src/index.ts"],
+      "@dex/uikit/*": ["../../packages/uikit/src/*"]
+    }
+  }
+}

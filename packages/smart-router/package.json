@@ -1,0 +1,50 @@
+{
+  "name": "@dex/smart-router",
+  "version": "5.1.7",
+  "description": "A SDK for getting best routes from AMM",
+  "sideEffects": false,
+  "scripts": {
+    "test": "vitest --run",
+    "update:snapshot": "vitest -u",
+    "clean": "rm -rf node_modules && rm -rf dist"
+  },
+  "dependencies": {
+    "@dex/chains": "workspace:*",
+    "@dex/multicall": "workspace:*",
+    "@dex/sdk": "workspace:*",
+    "@dex/swap-sdk-core": "workspace:*",
+    "@dex/tokens": "workspace:*",
+    "@dex/v3-sdk": "workspace:*",
+    "async-retry": "^1.3.1",
+    "debug": "^4.3.4",
+    "lodash": "^4.17.21",
+    "mnemonist": "^0.40.4",
+    "stats-lite": "^2.2.0",
+    "tiny-invariant": "^1.3.0",
+    "viem": "2.55.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@dex/tsconfig": "workspace:*",
+    "@dex/utils": "workspace:*",
+    "@types/async-retry": "^1.4.4",
+    "@types/debug": "^4.1.7",
+    "@types/lodash": "^4.14.178",
+    "@types/stats-lite": "^2.2.0"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./evm/index.ts",
+      "import": "./evm/index.ts"
+    },
+    "./evm": {
+      "types": "./evm/index.ts",
+      "import": "./evm/index.ts"
+    },
+    "./legacy-router": {
+      "types": "./legacy-router/index.ts",
+      "import": "./legacy-router/index.ts"
+    }
+  }
+}

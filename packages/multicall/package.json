@@ -1,0 +1,26 @@
+{
+  "name": "@dex/multicall",
+  "version": "3.5.0",
+  "sideEffects": false,
+  "scripts": {
+    "test": "vitest --run",
+    "coverage": "vitest run --coverage",
+    "clean": "rm -rf node_modules && rm -rf dist"
+  },
+  "dependencies": {
+    "@dex/sdk": "workspace:*",
+    "@dex/chains": "workspace:*",
+    "viem": "2.55.1"
+  },
+  "devDependencies": {
+    "@dex/tsconfig": "workspace:*",
+    "@dex/utils": "workspace:*"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    }
+  }
+}

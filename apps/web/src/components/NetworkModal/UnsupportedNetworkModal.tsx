@@ -1,0 +1,90 @@
+import { ChainId } from '@dex/chains'
+import { useTranslation } from '@dex/localization'
+import { Button, Grid, Message, MessageText, Modal, Text } from '@dex/uikit'
+import { useMenuItems } from 'components/Menu/hooks/useMenuItems'
+import { getActiveMenuItem, getActiveSubMenuItem } from 'components/Menu/utils'
+import { useLocalNetworkChain } from 'hooks/useActiveChainId'
+import useAuth from 'hooks/useAuth'
+import { useSwitchNetwork, useSwitchNetworkLocal } from 'hooks/useSwitchNetwork'
+import { useRouter } from 'utils/router'
+import { useMemo } from 'react'
+import { viemClients } from 'utils/viem'
+import { useAccount } from 'wagmi'
+import Dots from '../Loader/Dots'
+
+// Where chain is not supported or page not supported
+export function UnsupportedNetworkModal({ pageSupportedChains }: { pageSupportedChains: number[] }) {
+  const { switchNetworkAsync, isLoading, canSwitch } = useSwitchNetwork()
+  const switchNetworkLocal = useSwitchNetworkLocal()
+  const chainId = useLocalNetworkChain() || ChainId.ZILLIQA
+  const { isConnected } = useAccount()
+  const { logout } = useAuth()
+  const { t } = useTranslation()
+  const menuItems = useMenuItems()
+  const { pathname } = useRouter()
+
+  const title = useMemo(() => {
+    const activeMenuItem = getActiveMenuItem({ menuConfig: menuItems, pathname })
+    const activeSubMenuItem = getActiveSubMenuItem({ menuItem: activeMenuItem, pathname })
+
+    return activeSubMenuItem?.label || activeMenuItem?.label
+  }, [menuItems, pathname])
+
+  const supportedMainnetChains = useMemo(
+    () =>
+      Object.values(viemClients)
+        .map((client) => client.chain)
+        .filter((chain) => chain && !chain.testnet && pageSupportedChains?.includes(chain.id)),
+    [pageSupportedChains],
+  )
+
+  return (
+    <Modal title={t('Check your network')} hideCloseButton headerBackground="gradientCardHeader">
+      <Grid style={{ gap: '16px' }} maxWidth="336px">
+        <Text>
+          {t('Currently %feature% only supported in', { feature: typeof title === 'string' ? title : 'this page' })}{' '}
+          {supportedMainnetChains?.map((c) => c?.name).join(', ')}
+        </Text>
+        <Message variant="warning">
+          <MessageText>{t('Please switch your network to continue.')}</MessageText>
+        </Message>
+        {canSwitch ? (
+          <Button
+            isLoading={isLoading}
+            onClick={() => {
+              if (supportedMainnetChains.map((c) => c?.id).includes(chainId)) {
+                switchNetworkAsync(chainId)
+              } else {
+                switchNetworkAsync(ChainId.ZILLIQA)
+              }
+            }}
+          >
+            {isLoading ? (
+              <Dots>{isConnected ? t('Switch network in wallet') : t('Switch network')}</Dots>
+            ) : isConnected ? (
+              t('Switch network in wallet')
+            ) : (
+              t('Switch network')
+            )}
+          </Button>
+        ) : (
+          <Message variant="danger">
+            <MessageText>{t('Unable to switch network. Please try it on your wallet')}</MessageText>
+          </Message>
+        )}
+        {isConnected && (
+          <Button
+            variant="secondary"
+            onClick={() =>
+              logout().then(() => {
+                switchNetworkLocal(ChainId.ZILLIQA)
+              })
+            }
+          >
+            {t('Disconnect Wallet')}
+          </Button>
+        )}
+      </Grid>
+    </Modal>
+  )
+}

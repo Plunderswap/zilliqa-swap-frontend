@@ -1,0 +1,14 @@
+{
+  "extends": "@dex/tsconfig/base",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "target": "es2020",
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "skipLibCheck": true
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["**/*.test.ts", "./dist/**"]
+}

@@ -1,0 +1,60 @@
+import { Token } from '@dex/sdk'
+import { useModal } from '@dex/uikit'
+import { useEffect, useMemo } from 'react'
+
+import { useRouter } from 'utils/router'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+
+import ImportTokenWarningModal from 'components/ImportTokenWarningModal'
+import { useAllTokens, useCurrency } from 'hooks/Tokens'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { Field } from 'state/swap/actions'
+import { useSwapState } from 'state/swap/hooks'
+import { safeGetAddress } from 'utils'
+
+export default function useWarningImport() {
+  const queryClient = useQueryClient()
+  const router = useRouter()
+  const { chainId, isWrongNetwork } = useActiveWeb3React()
+  const {
+    [Field.INPUT]: { currencyId: inputCurrencyId },
+    [Field.OUTPUT]: { currencyId: outputCurrencyId },
+  } = useSwapState()
+
+  // token warning stuff
+  const [loadedInputCurrency, loadedOutputCurrency] = [useCurrency(inputCurrencyId), useCurrency(outputCurrencyId)]
+
+  const urlLoadedTokens: Token[] = useMemo(
+    () => [loadedInputCurrency, loadedOutputCurrency]?.filter((c): c is Token => Boolean(c?.isToken)) ?? [],
+    [loadedInputCurrency, loadedOutputCurrency],
+  )
+
+  const defaultTokens = useAllTokens()
+
+  const { data: loadedTokenList } = useQuery({
+    queryKey: ['token-list'],
+    queryFn: () => queryClient.getQueryData(['token-list']) ?? [],
+    enabled: false,
+  })
+
+  const importTokensNotInDefault = useMemo(() => {
+    return !isWrongNetwork && urlLoadedTokens && !!loadedTokenList
+      ? urlLoadedTokens.filter((token: Token) => {
+          const checksummedAddress = safeGetAddress(token.address) || ''
+
+          return !(checksummedAddress in defaultTokens) && token.chainId === chainId
+        })
+      : []
+  }, [chainId, defaultTokens, isWrongNetwork, loadedTokenList, urlLoadedTokens])
+
+  const [onPresentImportTokenWarningModal] = useModal(
+    <ImportTokenWarningModal tokens={importTokensNotInDefault} onCancel={() => router.push('/swap')} />,
+  )
+
+  useEffect(() => {
+    if (importTokensNotInDefault.length > 0) {
+      onPresentImportTokenWarningModal()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [importTokensNotInDefault.length])
+}

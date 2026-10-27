@@ -1,0 +1,72 @@
+{
+  "name": "swap-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "packageManager": "bun@1.3.14",
+  "scripts": {
+    "dev": "bun run --cwd apps/web dev",
+    "build": "bun run --cwd apps/web build",
+    "start": "bun run --cwd apps/web start",
+    "preview": "bun run --cwd apps/web preview",
+    "deploy": "bun run --cwd apps/web deploy",
+    "test:ci": "bun run --filter '*' test",
+    "lint": "bun run --filter '*' lint",
+    "lint:report": "bun run --filter '*' lint",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json}\"",
+    "format:write": "prettier --write \"**/*.{js,jsx,ts,tsx,json}\"",
+    "format:check:staged": "lint-staged",
+    "clean": "bun run --filter '*' clean && rm -rf node_modules",
+    "prepare": "husky install"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "devDependencies": {
+    "@dex/eslint-config": "workspace:*",
+    "@dex/tsconfig": "workspace:*",
+    "@eslint/eslintrc": "3.3.6",
+    "@eslint/js": "9.39.5",
+    "@stylelint/postcss-css-in-js": "^0.38.0",
+    "@types/minimatch": "6.0.0",
+    "@types/node": "^26.1.1",
+    "eslint-plugin-address": "^0.0.2",
+    "eslint-plugin-lodash": "^8.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.8",
+    "prettier": "^3.9.5",
+    "stylelint": "^17.14.0",
+    "stylelint-config-prettier": "^9.0.5",
+    "stylelint-config-recommended": "^18.0.0",
+    "stylelint-config-standard": "^40.0.0",
+    "stylelint-config-styled-components": "^0.1.1",
+    "typescript": "6.0.3",
+    "vitest": "^4.1.10"
+  },
+  "volta": {
+    "node": "22.12.0"
+  },
+  "patchedDependencies": {
+    "@ledgerhq/connect-kit-loader@1.1.2": "patches/@ledgerhq__connect-kit-loader@1.1.2.patch"
+  },
+  "overrides": {
+    "@base-org/account": "2.5.7",
+    "@coinbase/wallet-sdk": "4.3.7",
+    "@reown/appkit": "1.8.22",
+    "@reown/appkit-controllers": "1.8.22",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "@types/minimatch": "6.0.0",
+    "@walletconnect/ethereum-provider": "2.23.10",
+    "@walletconnect/universal-provider": "2.23.10",
+    "@walletconnect/utils": "2.23.10",
+    "form-data": "4.0.6",
+    "lodash": "4.18.1",
+    "porto": "0.2.37",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "extends": "@dex/tsconfig/react-library.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "target": "ES2015"
+  }
+}

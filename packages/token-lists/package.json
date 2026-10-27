@@ -1,0 +1,52 @@
+{
+  "name": "@dex/token-lists",
+  "version": "0.0.11",
+  "scripts": {
+    "test": "vitest --run",
+    "clean": "rm -rf node_modules && rm -rf dist"
+  },
+  "dependencies": {
+    "@dex/swap-sdk-core": "workspace:*",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "lodash": "^4.17.21"
+  },
+  "peerDependencies": {
+    "@reduxjs/toolkit": "^1.9.1",
+    "jotai": "^2.4.3",
+    "localforage": "^1.10.0",
+    "react": "^19.2.7"
+  },
+  "devDependencies": {
+    "@dex/utils": "workspace:*",
+    "@reduxjs/toolkit": "^2.12.0",
+    "@types/react": "^19.2.17",
+    "jotai": "^2.4.3",
+    "localforage": "^1.10.0",
+    "react": "^19.2.7"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./react": {
+      "types": "./react/index.ts",
+      "import": "./react/index.ts"
+    }
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "@reduxjs/toolkit": {
+      "optional": true
+    },
+    "localforage": {
+      "optional": true
+    },
+    "jotai": {
+      "optional": true
+    }
+  }
+}

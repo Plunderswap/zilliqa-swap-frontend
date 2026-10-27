@@ -1,0 +1,37 @@
+{
+  "name": "@dex/wagmi",
+  "version": "3.0.0",
+  "license": "MIT",
+  "description": "wagmi helpers and connectors",
+  "scripts": {
+    "clean": "rm -rf node_modules && rm -rf dist"
+  },
+  "peerDependencies": {
+    "@blocto/sdk": "0.10.4",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "viem": "2.55.1",
+    "wagmi": "3.7.1"
+  },
+  "devDependencies": {
+    "@blocto/sdk": "0.10.4",
+    "@dex/tsconfig": "workspace:*",
+    "@types/react": "^19.2.17",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "viem": "2.55.1",
+    "wagmi": "3.7.1"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    }
+  },
+  "peerDependenciesMeta": {
+    "@blocto/sdk": {
+      "optional": true
+    }
+  }
+}
