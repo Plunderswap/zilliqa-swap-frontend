@@ -78,13 +78,24 @@ The response is cached at the Cloudflare edge for an hour, and the CoinGecko pri
 
 ## Deploying
 
-The app deploys to Cloudflare Workers with Wrangler:
+The app deploys to Cloudflare Workers. Set the Worker name in `apps/web/wrangler.jsonc`. `NEXT_PUBLIC_*` variables are inlined at build time, so set them in the environment that runs the build.
+
+From your machine:
 
 ```sh
 bun run deploy
 ```
 
-Set the worker name in `apps/web/wrangler.jsonc`. `NEXT_PUBLIC_*` variables are inlined at build time, so set them in the environment that runs the build.
+With Cloudflare's Git integration (Workers Builds), this is a monorepo and the Worker config lives in `apps/web`. Use these build settings:
+
+| Setting         | Value                                                          |
+| --------------- | -------------------------------------------------------------- |
+| Root directory  | `/`                                                            |
+| Build command   | `bun run build`                                                |
+| Deploy command  | `cd apps/web && npx wrangler deploy`                           |
+| Build variables | `NEXT_PUBLIC_APP_NAME`, `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` |
+
+The Worker name in the dashboard must match `name` in `apps/web/wrangler.jsonc`.
 
 ## Repository layout
 
