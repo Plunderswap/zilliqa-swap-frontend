@@ -112,15 +112,15 @@ export const PoolsInfo = () => {
       <Message variant="danger" mb="16px">
         <MessageText>
           ZRC2-backed tokens (SEED, zUSDT, ZOGE, stZIL, gZIL, XCAD, zWBTC, ZILPEPE, VOID, STREAM, Lunr, GARY, ZHIB,
-          HRSE, FPS) have been exploited through a Zilliqa node bug and pools holding them have been drained, so their
-          prices and TVL shown here may not reflect real value.
+          HRSE, FPS) have been exploited through a Zilliqa chain-level vulnerability and pools holding them have been
+          drained, so their prices and TVL shown here may not reflect real value.
         </MessageText>
       </Message>
 
       <Message variant="danger" mb="16px">
         <MessageText>
-          X-Bridge has been hacked. Tokens bridged through it (zUSDC, zUSDT, zWBTC, XCAD) are no longer backed, so their
-          prices and TVL shown here do not reflect real value.
+          X-Bridge has been hacked. Tokens bridged through it (zUSDC, zUSDT, zWBTC, XCAD) may no longer be fully backed,
+          so their prices and TVL shown here may not reflect real value.
         </MessageText>
       </Message>
 

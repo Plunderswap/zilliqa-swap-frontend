@@ -1,5 +1,5 @@
 import { useTranslation } from "@dex/localization";
-import { Flex, LinkExternal } from "@dex/uikit";
+import { Flex, LinkExternal, Text } from "@dex/uikit";
 import { ReactNode, memo } from "react";
 import { styled } from "styled-components";
 
@@ -66,6 +66,11 @@ const Footer: React.FC<
         </Flex>
       )}
       {isSide && <Flex flexGrow={1} />}
+      <Text fontSize="12px" color="textSubtle" textAlign="center" px="16px" mt="8px" width="100%">
+        {t(
+          "Open-source software provided as is, with no warranty. Each deployment is run independently by whoever deploys it. Use at your own risk.",
+        )}
+      </Text>
       {/* {helpUrl && (
         <Flex
           flexGrow={isSide ? 0 : 1}

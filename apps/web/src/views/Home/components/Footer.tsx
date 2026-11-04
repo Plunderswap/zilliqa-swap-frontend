@@ -58,6 +58,11 @@ const Footer = () => {
           {t('No registration needed.')}
         </Text>
         {!account && <ConnectWalletButton variant="tertiary" />}
+        <Text mt="24px" px="16px" fontSize="12px" textAlign="center" color="white">
+          {t(
+            'Open-source software provided as is, with no warranty. Each deployment is run independently by whoever deploys it. Use at your own risk.',
+          )}
+        </Text>
       </Wrapper>
     </Box>
   )

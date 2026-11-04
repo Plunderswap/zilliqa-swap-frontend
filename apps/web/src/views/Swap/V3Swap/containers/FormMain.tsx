@@ -158,7 +158,7 @@ export function FormMain({ pricingAndSlippage, inputAmount, outputAmount, tradeL
         <Message variant="danger">
           <MessageText>
             {t(
-              'ZRC2-backed tokens have been exploited through a Zilliqa node bug and pools holding them have been drained, so prices may not reflect real value. Affected tokens in this swap: %symbols%',
+              'ZRC2-backed tokens have been exploited through a Zilliqa chain-level vulnerability and pools holding them have been drained, so prices may not reflect real value. Affected tokens in this swap: %symbols%',
               { symbols: zrc2Symbols.join(', ') },
             )}
           </MessageText>
@@ -168,7 +168,7 @@ export function FormMain({ pricingAndSlippage, inputAmount, outputAmount, tradeL
         <Message variant="danger">
           <MessageText>
             {t(
-              'X-Bridge has been hacked and tokens bridged through it are no longer backed. Affected tokens in this swap: %symbols%',
+              'X-Bridge has been hacked and tokens bridged through it may no longer be fully backed. Affected tokens in this swap: %symbols%',
               { symbols: unbackedSymbols.join(', ') },
             )}
           </MessageText>

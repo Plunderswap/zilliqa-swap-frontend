@@ -8,6 +8,8 @@ An open-source frontend for a Uniswap V2/V3-style AMM on [Zilliqa](https://www.z
 
 It runs as a [TanStack Start](https://tanstack.com/start) app on Cloudflare Workers. It has no backend of its own. Everything comes from the chain RPC, plus the public Blockscout API for discovering V3 pools.
 
+> **Disclaimer.** This is open-source software, provided as is, with no warranty of any kind. Each deployment is run independently by whoever deploys it. Anyone who deploys or uses it does so at their own risk. Always check contract addresses against a block explorer before transacting.
+
 ## Getting started
 
 Install dependencies with [Bun](https://bun.sh) (Node 22.12+ is also required):
@@ -27,16 +29,16 @@ bun run preview
 
 ## Configuration
 
-| What                                                                  | Where                                                                                                                                                                               |
-| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| App name (header, footer, titles, wallet prompts)                     | `NEXT_PUBLIC_APP_NAME` in `apps/web/.env`                                                                                                                                           |
-| WalletConnect project ID ([cloud.reown.com](https://cloud.reown.com)) | `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` in `apps/web/.env`                                                                                                                           |
-| PWA name and theme colour                                             | `apps/web/public/manifest.json`                                                                                                                                                     |
-| Logo mark                                                             | `packages/uikit/src/components/Svg/Icons/Logo.tsx`, plus the PNGs in `apps/web/public/` and `apps/web/public/icons/`                                                                |
-| Colour palette                                                        | `packages/uikit/src/tokens/colors.ts`                                                                                                                                               |
-| Menu items                                                            | `apps/web/src/components/Menu/config/config.ts`                                                                                                                                     |
-| Chains and RPC endpoints                                              | `apps/web/src/config/chains.ts`, `apps/web/src/config/nodes.ts`                                                                                                                     |
-| Contract addresses                                                    | `packages/swap-sdk/src/constants.ts` (V2), `packages/v3-sdk/src/constants.ts` (V3), `packages/smart-router/evm/constants/exchange.ts`, `apps/web/src/config/constants/contracts.ts` |
+| What                                                                                                               | Where                                                                                                                                                                               |
+| ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| App name (header, footer, titles, wallet prompts)                                                                  | `NEXT_PUBLIC_APP_NAME` in `apps/web/.env`                                                                                                                                           |
+| WalletConnect project ID ([cloud.reown.com](https://cloud.reown.com)), create your own, don't reuse someone else's | `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` in `apps/web/.env`                                                                                                                           |
+| PWA name and theme colour                                                                                          | `apps/web/public/manifest.json`                                                                                                                                                     |
+| Logo mark                                                                                                          | `packages/uikit/src/components/Svg/Icons/Logo.tsx`, plus the PNGs in `apps/web/public/` and `apps/web/public/icons/`                                                                |
+| Colour palette                                                                                                     | `packages/uikit/src/tokens/colors.ts`                                                                                                                                               |
+| Menu items                                                                                                         | `apps/web/src/components/Menu/config/config.ts`                                                                                                                                     |
+| Chains and RPC endpoints                                                                                           | `apps/web/src/config/chains.ts`, `apps/web/src/config/nodes.ts`                                                                                                                     |
+| Contract addresses                                                                                                 | `packages/swap-sdk/src/constants.ts` (V2), `packages/v3-sdk/src/constants.ts` (V3), `packages/smart-router/evm/constants/exchange.ts`, `apps/web/src/config/constants/contracts.ts` |
 
 ### Token list
 
@@ -64,7 +66,9 @@ Base tokens are the intermediaries the router tries when it looks for a path bet
 
 Each base token adds candidate pools to every quote, which means more RPC reads. Keep the list to the few most liquid tokens. Testnet has its own entries next to the mainnet ones (`ChainId.ZILLIQA_TESTNET`).
 
-> zUSDC and zUSDT are bridged through X-Bridge and are currently unbacked. USD values derived from them are unreliable. Replace them in the settings above once a backed stablecoin has liquidity.
+> zUSDC and zUSDT are bridged through X-Bridge and may no longer be fully backed. USD values derived from them are unreliable. Replace them in the settings above once a backed stablecoin has liquidity.
+>
+> kUSD is a native ERC-20 token and is not itself affected by the ZRC2 issue. Pools pairing kUSD with affected tokens were drained, though, so check any kUSD pool's pairing before relying on its price or liquidity.
 
 ### Pairs & Pools data
 
@@ -77,6 +81,10 @@ The `/stats` page reads from `/api/pools` (`apps/web/src/routes/api/pools.ts`), 
 The response is cached at the Cloudflare edge for an hour, and the CoinGecko price for six hours. Change `POOLS_TTL_SECONDS` and `PRICE_TTL_SECONDS` in that file to adjust. If CoinGecko is unavailable, TVL is shown in ZIL. Pairs with unbacked or exploited tokens (`apps/web/src/config/constants/unbackedTokens.ts`) are flagged on each row.
 
 ## Deploying
+
+Each deployment is independent: whoever deploys a copy runs it. Use your own Cloudflare account, Worker name and WalletConnect project ID.
+
+The app is built for Cloudflare Workers. Swapping and liquidity read the chain directly, but the Pairs & Pools page depends on the Worker route `/api/pools` and will not work on a purely static host such as IPFS.
 
 The app deploys to Cloudflare Workers. Set the Worker name in `apps/web/wrangler.jsonc`. `NEXT_PUBLIC_*` variables are inlined at build time, so set them in the environment that runs the build.
 
