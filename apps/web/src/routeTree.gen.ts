@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SwapRouteImport } from './routes/swap'
 import { Route as SendRouteImport } from './routes/send'
 import { Route as PoolRouteImport } from './routes/pool'
-import { Route as R451RouteImport } from './routes/451'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as StatsIndexRouteImport } from './routes/stats/index'
 import { Route as LiquidityIndexRouteImport } from './routes/liquidity/index'
@@ -21,13 +20,10 @@ import { Route as RemoveTokenIdRouteImport } from './routes/remove/$tokenId'
 import { Route as LiquidityTokenIdRouteImport } from './routes/liquidity/$tokenId'
 import { Route as IncreaseSplatRouteImport } from './routes/increase/$'
 import { Route as CreateSplatRouteImport } from './routes/create_.$'
-import { Route as ApiPoolsRouteImport } from './routes/api/pools'
 import { Route as AddSplatRouteImport } from './routes/add/$'
 import { Route as V2RemoveSplatRouteImport } from './routes/v2/remove/$'
 import { Route as V2PairSplatRouteImport } from './routes/v2/pair/$'
 import { Route as V2AddSplatRouteImport } from './routes/v2/add/$'
-import { Route as ApiReportCspRouteImport } from './routes/api/[_]report/csp'
-import { Route as ApiLogSplatRouteImport } from './routes/api/[_]log/$'
 
 const SwapRoute = SwapRouteImport.update({
   id: '/swap',
@@ -42,11 +38,6 @@ const SendRoute = SendRouteImport.update({
 const PoolRoute = PoolRouteImport.update({
   id: '/pool',
   path: '/pool',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const R451Route = R451RouteImport.update({
-  id: '/451',
-  path: '/451',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -89,11 +80,6 @@ const CreateSplatRoute = CreateSplatRouteImport.update({
   path: '/create/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPoolsRoute = ApiPoolsRouteImport.update({
-  id: '/api/pools',
-  path: '/api/pools',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AddSplatRoute = AddSplatRouteImport.update({
   id: '/add/$',
   path: '/add/$',
@@ -114,25 +100,13 @@ const V2AddSplatRoute = V2AddSplatRouteImport.update({
   path: '/v2/add/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiReportCspRoute = ApiReportCspRouteImport.update({
-  id: '/api/_report/csp',
-  path: '/api/_report/csp',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiLogSplatRoute = ApiLogSplatRouteImport.update({
-  id: '/api/_log/$',
-  path: '/api/_log/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/451': typeof R451Route
   '/pool': typeof PoolRoute
   '/send': typeof SendRoute
   '/swap': typeof SwapRoute
   '/add/$': typeof AddSplatRoute
-  '/api/pools': typeof ApiPoolsRoute
   '/create/$': typeof CreateSplatRoute
   '/increase/$': typeof IncreaseSplatRoute
   '/liquidity/$tokenId': typeof LiquidityTokenIdRoute
@@ -140,20 +114,16 @@ export interface FileRoutesByFullPath {
   '/swap/$outputCurrency': typeof SwapOutputCurrencyRoute
   '/liquidity/': typeof LiquidityIndexRoute
   '/stats/': typeof StatsIndexRoute
-  '/api/_log/$': typeof ApiLogSplatRoute
-  '/api/_report/csp': typeof ApiReportCspRoute
   '/v2/add/$': typeof V2AddSplatRoute
   '/v2/pair/$': typeof V2PairSplatRoute
   '/v2/remove/$': typeof V2RemoveSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/451': typeof R451Route
   '/pool': typeof PoolRoute
   '/send': typeof SendRoute
   '/swap': typeof SwapRoute
   '/add/$': typeof AddSplatRoute
-  '/api/pools': typeof ApiPoolsRoute
   '/create/$': typeof CreateSplatRoute
   '/increase/$': typeof IncreaseSplatRoute
   '/liquidity/$tokenId': typeof LiquidityTokenIdRoute
@@ -161,8 +131,6 @@ export interface FileRoutesByTo {
   '/swap/$outputCurrency': typeof SwapOutputCurrencyRoute
   '/liquidity': typeof LiquidityIndexRoute
   '/stats': typeof StatsIndexRoute
-  '/api/_log/$': typeof ApiLogSplatRoute
-  '/api/_report/csp': typeof ApiReportCspRoute
   '/v2/add/$': typeof V2AddSplatRoute
   '/v2/pair/$': typeof V2PairSplatRoute
   '/v2/remove/$': typeof V2RemoveSplatRoute
@@ -170,12 +138,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/451': typeof R451Route
   '/pool': typeof PoolRoute
   '/send': typeof SendRoute
   '/swap': typeof SwapRoute
   '/add/$': typeof AddSplatRoute
-  '/api/pools': typeof ApiPoolsRoute
   '/create_/$': typeof CreateSplatRoute
   '/increase/$': typeof IncreaseSplatRoute
   '/liquidity/$tokenId': typeof LiquidityTokenIdRoute
@@ -183,8 +149,6 @@ export interface FileRoutesById {
   '/swap_/$outputCurrency': typeof SwapOutputCurrencyRoute
   '/liquidity/': typeof LiquidityIndexRoute
   '/stats/': typeof StatsIndexRoute
-  '/api/_log/$': typeof ApiLogSplatRoute
-  '/api/_report/csp': typeof ApiReportCspRoute
   '/v2/add/$': typeof V2AddSplatRoute
   '/v2/pair/$': typeof V2PairSplatRoute
   '/v2/remove/$': typeof V2RemoveSplatRoute
@@ -193,12 +157,10 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/451'
     | '/pool'
     | '/send'
     | '/swap'
     | '/add/$'
-    | '/api/pools'
     | '/create/$'
     | '/increase/$'
     | '/liquidity/$tokenId'
@@ -206,20 +168,16 @@ export interface FileRouteTypes {
     | '/swap/$outputCurrency'
     | '/liquidity/'
     | '/stats/'
-    | '/api/_log/$'
-    | '/api/_report/csp'
     | '/v2/add/$'
     | '/v2/pair/$'
     | '/v2/remove/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/451'
     | '/pool'
     | '/send'
     | '/swap'
     | '/add/$'
-    | '/api/pools'
     | '/create/$'
     | '/increase/$'
     | '/liquidity/$tokenId'
@@ -227,20 +185,16 @@ export interface FileRouteTypes {
     | '/swap/$outputCurrency'
     | '/liquidity'
     | '/stats'
-    | '/api/_log/$'
-    | '/api/_report/csp'
     | '/v2/add/$'
     | '/v2/pair/$'
     | '/v2/remove/$'
   id:
     | '__root__'
     | '/'
-    | '/451'
     | '/pool'
     | '/send'
     | '/swap'
     | '/add/$'
-    | '/api/pools'
     | '/create_/$'
     | '/increase/$'
     | '/liquidity/$tokenId'
@@ -248,8 +202,6 @@ export interface FileRouteTypes {
     | '/swap_/$outputCurrency'
     | '/liquidity/'
     | '/stats/'
-    | '/api/_log/$'
-    | '/api/_report/csp'
     | '/v2/add/$'
     | '/v2/pair/$'
     | '/v2/remove/$'
@@ -257,12 +209,10 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  R451Route: typeof R451Route
   PoolRoute: typeof PoolRoute
   SendRoute: typeof SendRoute
   SwapRoute: typeof SwapRoute
   AddSplatRoute: typeof AddSplatRoute
-  ApiPoolsRoute: typeof ApiPoolsRoute
   CreateSplatRoute: typeof CreateSplatRoute
   IncreaseSplatRoute: typeof IncreaseSplatRoute
   LiquidityTokenIdRoute: typeof LiquidityTokenIdRoute
@@ -270,8 +220,6 @@ export interface RootRouteChildren {
   SwapOutputCurrencyRoute: typeof SwapOutputCurrencyRoute
   LiquidityIndexRoute: typeof LiquidityIndexRoute
   StatsIndexRoute: typeof StatsIndexRoute
-  ApiLogSplatRoute: typeof ApiLogSplatRoute
-  ApiReportCspRoute: typeof ApiReportCspRoute
   V2AddSplatRoute: typeof V2AddSplatRoute
   V2PairSplatRoute: typeof V2PairSplatRoute
   V2RemoveSplatRoute: typeof V2RemoveSplatRoute
@@ -298,13 +246,6 @@ declare module '@tanstack/react-router' {
       path: '/pool'
       fullPath: '/pool'
       preLoaderRoute: typeof PoolRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/451': {
-      id: '/451'
-      path: '/451'
-      fullPath: '/451'
-      preLoaderRoute: typeof R451RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -363,13 +304,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreateSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/pools': {
-      id: '/api/pools'
-      path: '/api/pools'
-      fullPath: '/api/pools'
-      preLoaderRoute: typeof ApiPoolsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/add/$': {
       id: '/add/$'
       path: '/add/$'
@@ -398,31 +332,15 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof V2AddSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/_report/csp': {
-      id: '/api/_report/csp'
-      path: '/api/_report/csp'
-      fullPath: '/api/_report/csp'
-      preLoaderRoute: typeof ApiReportCspRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/_log/$': {
-      id: '/api/_log/$'
-      path: '/api/_log/$'
-      fullPath: '/api/_log/$'
-      preLoaderRoute: typeof ApiLogSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  R451Route: R451Route,
   PoolRoute: PoolRoute,
   SendRoute: SendRoute,
   SwapRoute: SwapRoute,
   AddSplatRoute: AddSplatRoute,
-  ApiPoolsRoute: ApiPoolsRoute,
   CreateSplatRoute: CreateSplatRoute,
   IncreaseSplatRoute: IncreaseSplatRoute,
   LiquidityTokenIdRoute: LiquidityTokenIdRoute,
@@ -430,8 +348,6 @@ const rootRouteChildren: RootRouteChildren = {
   SwapOutputCurrencyRoute: SwapOutputCurrencyRoute,
   LiquidityIndexRoute: LiquidityIndexRoute,
   StatsIndexRoute: StatsIndexRoute,
-  ApiLogSplatRoute: ApiLogSplatRoute,
-  ApiReportCspRoute: ApiReportCspRoute,
   V2AddSplatRoute: V2AddSplatRoute,
   V2PairSplatRoute: V2PairSplatRoute,
   V2RemoveSplatRoute: V2RemoveSplatRoute,
@@ -441,11 +357,10 @@ export const routeTree = rootRouteImport
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
+import type { createStart } from '@tanstack/react-start'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }

@@ -6,7 +6,7 @@ An open-source frontend for a Uniswap V2/V3-style AMM on [Zilliqa](https://www.z
 - Adding and removing V2 liquidity and V3 concentrated-liquidity positions
 - A Pairs & Pools page, built from on-chain data only
 
-It runs as a [TanStack Start](https://tanstack.com/start) app on Cloudflare Workers. It has no backend of its own. Everything comes from the chain RPC, plus the public Blockscout API for discovering V3 pools.
+It's a [TanStack Start](https://tanstack.com/start) app built as a static single-page app. It has no backend of its own. Everything runs in the browser and comes from the chain RPC, plus the public Blockscout API for discovering V3 pools and CoinGecko for the ZIL price.
 
 > **Disclaimer.** This is open-source software, provided as is, with no warranty of any kind. Each deployment is run independently by whoever deploys it. Anyone who deploys or uses it does so at their own risk. Always check contract addresses against a block explorer before transacting.
 
@@ -72,21 +72,23 @@ Each base token adds candidate pools to every quote, which means more RPC reads.
 
 ### Pairs & Pools data
 
-The `/stats` page reads from `/api/pools` (`apps/web/src/routes/api/pools.ts`), which runs on the Worker and builds the list in three steps:
+The `/stats` page builds the list in the browser (`apps/web/src/views/PoolsInfo/api.ts`) in three steps:
 
 1. V2 pairs come from the V2 factory.
 2. V3 pools come from the V3 factory's `getPool` for every pair of known tokens and fee tiers, plus `PoolCreated` logs from Blockscout for tokens that aren't in the list. Pools created before the explorer's indexed history have no logs, which is why the factory lookup is needed.
 3. Reserves and prices are read on-chain. Each token is priced in ZIL from its deepest ZIL pool, then converted to USD at the CoinGecko ZIL price.
 
-The response is cached at the Cloudflare edge for an hour, and the CoinGecko price for six hours. Change `POOLS_TTL_SECONDS` and `PRICE_TTL_SECONDS` in that file to adjust. If CoinGecko is unavailable, TVL is shown in ZIL. Pairs with unbacked or exploited tokens (`apps/web/src/config/constants/unbackedTokens.ts`) are flagged on each row.
+This takes several RPC and Blockscout calls, so each visitor's first load of the page takes a few seconds. The result is kept for an hour while the tab stays open (`staleTime` in `apps/web/src/views/PoolsInfo/index.tsx`). If CoinGecko is unavailable, TVL is shown in ZIL. Pairs with unbacked or exploited tokens (`apps/web/src/config/constants/unbackedTokens.ts`) are flagged on each row.
 
 ## Deploying
 
-Each deployment is independent: whoever deploys a copy runs it. Use your own Cloudflare account, Worker name and WalletConnect project ID.
+Each deployment is independent: whoever deploys a copy runs it. Use your own hosting account and WalletConnect project ID.
 
-The app is built for Cloudflare Workers. Swapping and liquidity read the chain directly, but the Pairs & Pools page depends on the Worker route `/api/pools` and will not work on a purely static host such as IPFS.
+> **Access restrictions are your responsibility.** The app doesn't restrict who can use it by country or region. If the place you deploy from requires blocking sanctioned countries or regions, set that up on your host, for example with a [Cloudflare WAF custom rule](https://developers.cloudflare.com/waf/custom-rules/) that blocks by country.
 
-The app deploys to Cloudflare Workers. Set the Worker name in `apps/web/wrangler.jsonc`. `NEXT_PUBLIC_*` variables are inlined at build time, so set them in the environment that runs the build.
+`bun run build` writes a static site to `apps/web/dist/client`. Any static host works, as long as it serves `index.html` for paths that don't match a file, so that links like `/swap` and `/add/...` load the app. Response headers for Cloudflare are set in `apps/web/public/_headers`. Other hosts need the equivalent configured. `NEXT_PUBLIC_*` variables are inlined at build time, so set them in the environment that runs the build.
+
+The repo is set up to deploy to Cloudflare Workers as static assets, with no Worker code. Set the project name in `apps/web/wrangler.jsonc`.
 
 From your machine:
 
@@ -94,7 +96,7 @@ From your machine:
 bun run deploy
 ```
 
-With Cloudflare's Git integration (Workers Builds), this is a monorepo and the Worker config lives in `apps/web`. Use these build settings:
+With Cloudflare's Git integration (Workers Builds), this is a monorepo and the Wrangler config lives in `apps/web`. Use these build settings:
 
 | Setting         | Value                                                          |
 | --------------- | -------------------------------------------------------------- |
@@ -103,7 +105,7 @@ With Cloudflare's Git integration (Workers Builds), this is a monorepo and the W
 | Deploy command  | `cd apps/web && npx wrangler deploy`                           |
 | Build variables | `NEXT_PUBLIC_APP_NAME`, `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` |
 
-The Worker name in the dashboard must match `name` in `apps/web/wrangler.jsonc`.
+The project name in the dashboard must match `name` in `apps/web/wrangler.jsonc`.
 
 ## Repository layout
 

@@ -1,8 +1,10 @@
+import { ChainId } from '@dex/chains'
 import { Flex, Message, MessageText, Text, Toggle, useMatchBreakpoints } from '@dex/uikit'
 import { useQuery } from '@tanstack/react-query'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
+import { fetchPoolsInfo, fetchZilUsd } from './api'
 import ErrorState from './components/ErrorState'
 import LoadingState from './components/LoadingState'
 import PairRow from './components/PairRow'
@@ -46,13 +48,12 @@ export const PoolsInfo = () => {
 
   const { data, isPending, isError, refetch } = useQuery({
     queryKey: ['pools-info', chainId],
-    queryFn: async () => {
-      const res = await fetch(`/api/pools?chainId=${chainId}`)
-      if (!res.ok) throw new Error(`Failed to load pools: ${res.status}`)
-      return (await res.json()) as PoolsInfoResponse
+    queryFn: async (): Promise<PoolsInfoResponse> => {
+      const [pairs, zilUsd] = await Promise.all([fetchPoolsInfo(chainId as ChainId), fetchZilUsd()])
+      return { pairs, zilUsd, updatedAt: new Date().toISOString() }
     },
     enabled: Boolean(chainId),
-    // the API response is cached for an hour, so there is nothing newer to fetch before then
+    // building the list takes many RPC and explorer calls, so it is only rebuilt once an hour
     staleTime: 60 * 60 * 1000,
     refetchOnWindowFocus: false,
   })

@@ -11,7 +11,6 @@ import { useSwapState } from 'state/swap/hooks'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { calculateGasMargin, safeGetAddress } from 'utils'
 import { basisPointsToPercent } from 'utils/exchange'
-import { logTx } from 'utils/log'
 import { isUserRejected } from 'utils/sentry'
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
 import { Address, Hex, UserRejectedRequestError, hexToBigInt } from 'viem'
@@ -169,7 +168,6 @@ export default function useSendSwapTransaction(
               },
               type: 'swap',
             })
-            logTx({ account, chainId, hash: response.hash })
             return response
           })
           .catch((error) => {

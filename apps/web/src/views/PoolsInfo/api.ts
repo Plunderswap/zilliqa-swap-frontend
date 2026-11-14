@@ -38,6 +38,7 @@ const [POOL_CREATED_TOPIC] = encodeEventTopics({ abi: poolCreatedAbi, eventName:
 
 // Blockscout's etherscan-compatible getLogs returns at most 1000 logs per request
 const BLOCKSCOUT_MAX_LOGS = 1000
+const ZIL_PRICE_URL = 'https://api.coingecko.com/api/v3/simple/price?ids=zilliqa&vs_currencies=usd'
 
 interface RawPool {
   address: Address
@@ -298,4 +299,19 @@ export async function fetchPoolsInfo(chainId: ChainId): Promise<PairData[]> {
   return [...pairs.values()]
     .map((pair) => ({ ...pair, pools: pair.pools.sort((a, b) => b.tvlZIL - a.tvlZIL) }))
     .sort((a, b) => b.tvlZIL - a.tvlZIL)
+}
+
+export async function fetchZilUsd(): Promise<number | null> {
+  try {
+    const res = await fetch(ZIL_PRICE_URL)
+    if (!res.ok) {
+      console.error('Failed to fetch ZIL price', res.status)
+      return null
+    }
+    const json = (await res.json()) as { zilliqa?: { usd?: unknown } }
+    return typeof json.zilliqa?.usd === 'number' ? json.zilliqa.usd : null
+  } catch (error) {
+    console.error('Failed to fetch ZIL price', error)
+    return null
+  }
 }

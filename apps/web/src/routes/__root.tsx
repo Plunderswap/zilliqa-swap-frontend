@@ -1,11 +1,8 @@
-import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router'
-import Providers from '../Providers'
-import { AppShell } from '../components/AppShell'
+import { ClientOnly, HeadContent, Scripts, createRootRoute, lazyRouteComponent } from '@tanstack/react-router'
 import { APP_NAME } from '../config/constants'
 import { DEFAULT_META } from '../config/constants/meta'
-import NotFoundPage from '../pages/404'
-import GlobalStyle from '../style/Global'
-import { useStore } from '../state'
+
+const RootApp = lazyRouteComponent(() => import('../components/RootApp'), 'RootApp')
 
 export const Route = createRootRoute({
   head: () => ({
@@ -43,30 +40,32 @@ export const Route = createRootRoute({
       { rel: 'manifest', href: '/manifest.json' },
     ],
   }),
-  component: RootDocument,
-  notFoundComponent: NotFound,
+  ssr: false,
+  shellComponent: RootDocument,
+  component: RootComponent,
+  notFoundComponent: lazyRouteComponent(() => import('../components/RootApp'), 'NotFound'),
 })
 
-function RootDocument() {
-  const store = useStore(undefined)
+// The SPA shell is prerendered at build time with the root route rendered, so keep the app out of it
+function RootComponent() {
+  return (
+    <ClientOnly>
+      <RootApp />
+    </ClientOnly>
+  )
+}
 
+function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" translate="no" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
-        <Providers store={store} dehydratedState={undefined}>
-          <GlobalStyle />
-          <Outlet />
-        </Providers>
+        {children}
         <div id="portal-root" />
         <Scripts />
       </body>
     </html>
   )
-}
-
-function NotFound() {
-  return <AppShell Component={NotFoundPage} />
 }

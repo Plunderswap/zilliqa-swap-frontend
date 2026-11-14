@@ -1,4 +1,3 @@
-import { cloudflare } from '@cloudflare/vite-plugin'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react-swc'
 import { defineConfig, loadEnv } from 'vite'
@@ -36,9 +35,11 @@ export default defineConfig(({ mode }) => {
       },
     },
     plugins: [
-      cloudflare({ viteEnvironment: { name: 'ssr' } }) as any,
       tsconfigPaths(),
-      tanstackStart({ server: { entry: 'server' }, client: { entry: 'client' } }),
+      tanstackStart({
+        client: { entry: 'client' },
+        spa: { enabled: true, prerender: { outputPath: '/index.html' } },
+      }),
       viteReact({
         plugins: [['@swc/plugin-styled-components', { ssr: true }]],
       }),
