@@ -18,7 +18,7 @@
     "@dex/uikit": "workspace:*",
     "@dex/utils": "workspace:*",
     "@dex/v3-sdk": "workspace:*",
-    "@tanstack/react-router": "1.170.17",
+    "@tanstack/react-router": "1.170.41",
     "bignumber.js": "^11.1.5",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.10",
